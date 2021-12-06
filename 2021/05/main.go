@@ -8,8 +8,10 @@ import (
 )
 
 func main() {
+	isPartTwoEnabled := false
+
 	coordinatePairs := ReadFileAndParse("input.txt")
-	populatedGrid := BuildGrid(coordinatePairs)
+	populatedGrid := BuildGrid(coordinatePairs, isPartTwoEnabled)
 	intersectionCount := CountIntersections(populatedGrid)
 	log.Print(intersectionCount)
 }
@@ -44,7 +46,7 @@ func parseLineToCoordinatePair(line string) CoordinatePair {
 	return CoordinatePair{x1: Atoi(coord1[0]), y1: Atoi(coord1[1]), x2: Atoi(coord2[0]), y2: Atoi(coord2[1])}
 }
 
-func BuildGrid(coordinatePairs []CoordinatePair) [999][999]int {
+func BuildGrid(coordinatePairs []CoordinatePair, isPartTwoEnabled bool) [999][999]int {
 	var grid [999][999]int
 	for _, coord := range coordinatePairs {
 		if coord.x1 == coord.x2 {
@@ -55,9 +57,40 @@ func BuildGrid(coordinatePairs []CoordinatePair) [999][999]int {
 			for i := Min(coord.x1, coord.x2); i <= Max(coord.x1, coord.x2); i++ {
 				grid[i][coord.y1]++
 			}
+		} else if isPartTwoEnabled {
+			PartTwo(&grid, coord)
 		}
 	}
 	return grid
+}
+
+func PartTwo(grid *[999][999]int, coord CoordinatePair) {
+
+	var leftX int
+	var leftY int
+	var rightX int
+	var rightY int
+	if Min(coord.x1, coord.x2) == coord.x1 {
+		leftX = coord.x1
+		leftY = coord.y1
+		rightX = coord.x2
+		rightY = coord.y2
+	} else {
+		leftX = coord.x2
+		leftY = coord.y2
+		rightX = coord.x1
+		rightY = coord.y1
+	}
+
+	if leftY > rightY { //downwards slope
+		for i := 0; i <= rightX-leftX; i++ {
+			grid[leftX+i][leftY-i]++
+		}
+	} else { //upwards slope
+		for i := 0; i <= rightX-leftX; i++ {
+			grid[leftX+i][leftY+i]++
+		}
+	}
 }
 
 func CountIntersections(grid [999][999]int) int {
