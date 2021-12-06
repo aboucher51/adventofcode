@@ -8,12 +8,9 @@ import (
 )
 
 func main() {
-	isPartTwoEnabled := false
-
 	coordinatePairs := ReadFileAndParse("input.txt")
-	populatedGrid := BuildGrid(coordinatePairs, isPartTwoEnabled)
-	intersectionCount := CountIntersections(populatedGrid)
-	log.Print(intersectionCount)
+	log.Printf("Part 1: %d", CountIntersections(BuildGrid(coordinatePairs, false)))
+	log.Printf("Part 2: %d", CountIntersections(BuildGrid(coordinatePairs, true)))
 }
 
 func Atoi(s string) int {
@@ -127,6 +124,3 @@ type CoordinatePair struct {
 	x2 int
 	y2 int
 }
-
-//greater than 8314
-//less than 8425
