@@ -9,13 +9,6 @@ import (
 	"strings"
 )
 
-const lanternfish_adolescence int = 2
-const lanternfish_cycle int = 6
-const lanternfish_cohort_length = lanternfish_adolescence + lanternfish_cycle + 1 + 1 //newborn fish are marked an extra day so they dont iterate twice
-
-const numberOfDaysToIteratePartOne int = 80
-const numberOfDaysToIteratePartTwo int = 256
-
 func main() {
 	input := ReadFileAndParseToIntArray("input.txt")
 	log.Printf("Part 1: %d", PartOne(input))
