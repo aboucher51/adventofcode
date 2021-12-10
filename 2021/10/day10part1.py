@@ -1,26 +1,25 @@
-import os
-print (os.getcwd())
 
-heightmap = []
-with open("2021/09/input.txt") as file:
+lines = []
+with open("2021/10/input.txt") as file:
     for line in file:
-        heightmap.append(list(line.rstrip()))
+        lines.append(list(line.rstrip()))
 
-localMinima = []
+openingChars = "[{<("
+pairs = {'}': '{', ']': '[', '>': '<', ')': '('}
+scoring = {')': 3, ']': 57, '}': 1197, '>': 25137}
 
-for i in range(len(heightmap)):
-    for j in range(len(heightmap[i])):
-        currentPoint = heightmap[i][j]
-        if(    (i==0 or (heightmap[i-1][j] > currentPoint))
-           and (j==0 or (heightmap[i][j-1] > currentPoint))
-           and (i==len(heightmap)-1 or (heightmap[i+1][j] > currentPoint))
-           and (j==len(heightmap[i])-1 or (heightmap[i][j+1] > currentPoint))):
-            localMinima.append(currentPoint)
+workingStack = []
+score = 0
 
-#print(localMinima)
+for line in lines:
+    for rune in line:
+        if rune in openingChars:
+            workingStack.append(rune)
+        else:
+            if workingStack[len(workingStack)-1] == pairs[rune]:
+                workingStack.pop()
+            else:
+                score += scoring[rune]
+                break
 
-localMinimaSum = 0
-for localMinimum in localMinima:
-    localMinimaSum += int(localMinimum)+1
-
-print("Part 1: "+str(localMinimaSum))
+print("Part 1: "+str(score))
